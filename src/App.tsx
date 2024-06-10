@@ -1,13 +1,14 @@
-/* import { useState } from 'react' */
-import './App.css'
+// src/App.tsx
 
-function App() {
+import React from 'react';
+import GameBoard from './components/GameBoard';
 
+const App: React.FC = () => {
   return (
     <div className="App">
       <GameBoard />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

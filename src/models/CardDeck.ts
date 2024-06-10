@@ -26,4 +26,8 @@ export class CardDeck implements ICardDeck {
             [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
         }
     }
+
+    drawCard(): ICard | undefined {
+        return this.cards.pop();
+    }
 }
