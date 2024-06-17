@@ -1,33 +1,37 @@
-import { ICardDeck, ICard } from "../../ts/interfaces/global_interface";
+// src/models/CardDeck.ts
 
-const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-const ranks = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+import { ICard } from '../../ts/interfaces/global_interface';
 
-export class CardDeck implements ICardDeck {
-    cards: ICard[];
+export class CardDeck {
+  cards: ICard[];
 
-    constructor() {
-        this.cards = [];
-        this.initializeDeck();
+  constructor() {
+    this.cards = this.generateDeck();
+  }
+
+  generateDeck(): ICard[] {
+    const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const deck: ICard[] = [];
+
+    for (const suit of suits) {
+      for (const rank of ranks) {
+        deck.push({ rank, suit });
+      }
     }
 
-    initializeDeck(): void {
-        for(const suit of suits) {
-            for (const rank of ranks ){
-                this.cards.push({ suit, rank});
-            }
-        }
-        this.shuffle();
-    }
+    return this.shuffle(deck);
+  }
 
-    shuffle(): void {
-        for (let i = this.cards.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
-        }
+  shuffle(cards: ICard[]): ICard[] {
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
     }
+    return cards;
+  }
 
-    drawCard(): ICard | undefined {
-        return this.cards.pop();
-    }
+  drawCard(): ICard | undefined {
+    return this.cards.pop();
+  }
 }
