@@ -37,6 +37,45 @@ export class DurakGame {
     }
   }
 
+  remainingCardsCount(): number {
+    return this.deck.cards.length;
+  }
+
+  takeCardsFromTable(): void {
+    if (this.currentDefenderIndex !== null) {
+      const defender = this.players[this.currentDefenderIndex];
+      this.table.forEach(play => {
+        if (play.defense) {
+          defender.addCard(play.defense);
+        }
+        defender.addCard(play.attack);
+      });
+      this.table = [];
+    }
+  }
+
+  continueAttackPhase(): void {
+    // Fülle die Hand des vorherigen Angreifers auf, falls er weniger als 6 Karten hat
+    while (this.players[this.currentAttackerIndex].hand.length < 6 && this.deck.cards.length > 0) {
+      const card = this.deck.drawCard();
+      if (card) {
+        this.players[this.currentAttackerIndex].addCard(card);
+      }
+    }
+
+    // Bestimme den nächsten Angreifer und Verteidiger
+    this.currentAttackerIndex = (this.currentDefenderIndex + 1) % this.players.length;
+    this.currentDefenderIndex = (this.currentAttackerIndex + 1) % this.players.length;
+
+    // Der neue Angreifer sollte auch Karten ziehen, falls nötig
+    while (this.players[this.currentAttackerIndex].hand.length < 6 && this.deck.cards.length > 0) {
+      const card = this.deck.drawCard();
+      if (card) {
+        this.players[this.currentAttackerIndex].addCard(card);
+      }
+    }
+  }
+
   placeCard(playerIndex: number, card: ICard): void {
     if (playerIndex === this.currentAttackerIndex) {
       this.table.push({ attack: card });
@@ -65,9 +104,9 @@ export class DurakGame {
 
   getCardValue(card: ICard): number {
     const values: { [key: string]: number } = {
-      '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
-      '7': 7, '8': 8, '9': 9, '10': 10,
-      'J': 11, 'Q': 12, 'K': 13, 'A': 14
+      '6': 6, '7': 7, '8': 8, '9': 9,
+      '10': 10, 'J': 11, 'Q': 12,
+      'K': 13, 'A': 14
     };
     return values[card.rank];
   }

@@ -11,7 +11,7 @@ export class CardDeck {
 
   generateDeck(): ICard[] {
     const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const ranks = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     const deck: ICard[] = [];
 
     for (const suit of suits) {

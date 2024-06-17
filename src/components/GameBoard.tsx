@@ -45,6 +45,14 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
     }
   };
 
+  const handleTakeCardsFromTable = () => {
+    if (game) {
+      game.takeCardsFromTable();
+      game.continueAttackPhase();
+      setCurrentPlayerIndex(game.currentAttackerIndex);
+    }
+  };
+
   if (!game) {
     return <div>Loading...</div>;
   }
@@ -61,6 +69,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
         </div>
         <div>
           <strong>Trump Card:</strong> {trumpCard ? `${trumpCard.rank} of ${trumpCard.suit}` : 'None'}
+        </div>
+        <div>
+          <strong>Remaining Cards:</strong> {game.remainingCardsCount()}
         </div>
       </div>
       <div>
@@ -106,6 +117,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
         <div>
           <button onClick={handlePlaceCard} disabled={!selectedCard}>Place Card</button>
           <button onClick={handlePass}>Pass</button>
+          {game.currentDefenderIndex === currentPlayerIndex && (
+            <button onClick={handleTakeCardsFromTable}>Take Cards from Table</button>
+          )}
         </div>
       </div>
     </div>
