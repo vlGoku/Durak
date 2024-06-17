@@ -1,6 +1,8 @@
-import { IPlayer, ICard } from '../../ts/interfaces/global_interface';
+// src/models/Player.ts
 
-export class Player implements IPlayer {
+import { ICard } from '../../ts/interfaces/global_interface';
+
+export class Player {
   id: number;
   name: string;
   hand: ICard[];
