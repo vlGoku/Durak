@@ -1,5 +1,3 @@
-// src/game/DurakGame.ts
-
 import { Player } from '../models/Player';
 import { CardDeck } from '../models/CardDeck';
 import { ICard } from '../../ts/interfaces/global_interface';
@@ -96,7 +94,7 @@ export class DurakGame {
     if (attackCard.suit === defenseCard.suit && this.getCardValue(defenseCard) > this.getCardValue(attackCard)) {
       return true;
     }
-    if (defenseCard.suit === this.trumpCard?.suit) {
+    if (defenseCard.suit === this.trumpCard?.suit && attackCard.suit !== this.trumpCard?.suit) {
       return true;
     }
     return false;
@@ -111,7 +109,14 @@ export class DurakGame {
     return values[card.rank];
   }
 
+  defenderMustAct(): boolean {
+    return this.table.some(play => !play.defense);
+  }
+
   endTurn(): void {
+    if (this.defenderMustAct()) {
+      throw new Error('Defender must either defend or take the cards');
+    }
     this.currentAttackerIndex = (this.currentAttackerIndex + 1) % this.players.length;
     this.currentDefenderIndex = (this.currentDefenderIndex + 1) % this.players.length;
     this.table = [];
