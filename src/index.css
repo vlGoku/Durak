@@ -17,6 +17,7 @@ body {
 
 h1, h2, h3 {
   color: #333;
+  text-align: center; /* Zentrieren der Überschriften */
 }
 
 button {
@@ -62,11 +63,77 @@ input[type="text"]:focus {
 
 .flex-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Zentrieren des Inhalts */
+  margin-bottom: 20px; /* Abstand nach unten hinzufügen */
 }
 
 .flex-item {
   flex: 1;
   margin-right: 10px;
+  text-align: center; /* Text zentrieren */
 }
 
+/* Zusätzliche Klassen zum Zentrieren des Spielers und Tisches */
+.player-hand {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: yellow;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.table {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: orange;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.attacker {
+  color: #f44336;
+}
+
+.defender {
+  color: #45a049;
+}
+
+
+.header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  text-align: center; 
+}
+
+.header > div {
+  flex: 1; 
+  padding: 0 10px; 
+}
+
+.trumpCard {
+  text-align: center;
+  font-size: 2em;
+}
+
+.playerAndDeck {
+  text-align: center;
+  font-size: 2em;
+  padding-bottom: 2vh;
+}
+
+.durakHeader {
+  font-size: 3em;
+}
+
+.startPage {
+  display: flex;
+  justify-content: center;
+}
+
+.startPageButtons {
+  display: flex;
+  justify-content: center;
+}
