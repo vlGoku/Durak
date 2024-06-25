@@ -1,5 +1,3 @@
-// GameBoard.tsx
-
 import React, { useState, useEffect } from "react";
 import { DurakGame } from "../game/DurakGame";
 import { ICard } from "../../ts/interfaces/global_interface";
@@ -24,14 +22,20 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
     }
   }, [playerNames]);
 
+  useEffect(() => {
+    if (game) {
+      checkEndGame();
+    }
+  }, [game]);
+
   const handleCardSelect = (card: ICard) => {
     setSelectedCard(card);
   };
 
   const handlePlaceCard = () => {
-    if (selectedCard && game) {
+    if (selectedCard && game && currentPlayerIndex !== null) {
       try {
-        game.placeCard(currentPlayerIndex!, selectedCard);
+        game.placeCard(currentPlayerIndex, selectedCard);
         setSelectedCard(null);
         if (currentPlayerIndex === game.currentAttackerIndex) {
           setCurrentPlayerIndex(game.currentDefenderIndex);
@@ -39,6 +43,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
           setCurrentPlayerIndex(game.currentAttackerIndex);
         }
         setError(null);
+        checkEndGame(); // Check game end after placing card
       } catch (error) {
         setError((error as Error).message);
       }
@@ -46,30 +51,57 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
   };
 
   const handlePass = () => {
-    if (game && currentPlayerIndex === game.currentAttackerIndex) {
-      game.endTurn();
-      setSelectedCard(null);
-      setCurrentPlayerIndex(game.currentAttackerIndex);
-      setError(null);
-    } else if (game && currentPlayerIndex === game.currentDefenderIndex) {
-      try {
-        game.takeCardsFromTable();
-        game.continueAttackPhase();
-        setSelectedCard(null);
-        setCurrentPlayerIndex(game.currentAttackerIndex);
-        setError(null);
-      } catch (error) {
-        setError((error as Error).message);
+    if (game && currentPlayerIndex !== null) {
+      if (currentPlayerIndex === game.currentAttackerIndex) {
+        try {
+          game.endTurn();
+          setSelectedCard(null);
+          setCurrentPlayerIndex(game.currentAttackerIndex);
+          setError(null);
+          checkEndGame(); // Check game end after ending turn
+        } catch (error) {
+          setError((error as Error).message);
+        }
+      } else if (currentPlayerIndex === game.currentDefenderIndex) {
+        try {
+          game.takeCardsFromTable();
+          game.continueAttackPhase();
+          setSelectedCard(null);
+          setCurrentPlayerIndex(game.currentAttackerIndex);
+          setError(null);
+          checkEndGame(); // Check game end after taking cards from table
+        } catch (error) {
+          setError((error as Error).message);
+        }
+      }
+    }
+  };
+
+  const checkEndGame = () => {
+    if (game) {
+      const remainingPlayers = game.players.filter(
+        player => player.hand.length > 0
+      );
+      if (remainingPlayers.length === 1) {
+        const loser = game.players.find(player => player.hand.length > 0);
+        if (loser) {
+          alert(`Game Over! ${loser.name} is the Durak.`);
+          setGame(null);
+          setCurrentPlayerIndex(null);
+          setSelectedCard(null);
+          setError(null);
+          window.location.href = "/"; // Redirect to start page
+        }
       }
     }
   };
 
   const handleNewGame = () => {
-    setGame(null); // Setze das Spiel zurück
+    setGame(null); // Reset game
     setCurrentPlayerIndex(null);
     setSelectedCard(null);
     setError(null);
-    window.location.href = "/"; // Hier wird die Seite direkt zur Startseite umgeleitet
+    window.location.href = "/"; // Redirect to start page
   };
 
   if (!game) {
@@ -127,7 +159,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
             }}
           >
             <h3>Your Hand</h3>
-            <h2>Current Player: {game.players[currentPlayerIndex!].name}</h2>
+            <h2>Current Player: {currentPlayer.name}</h2>
             <div>
               {currentPlayer.hand.map((card, index) => (
                 <div
