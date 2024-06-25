@@ -1,3 +1,5 @@
+// GameBoard.tsx
+
 import React, { useState, useEffect } from "react";
 import { DurakGame } from "../game/DurakGame";
 import { ICard } from "../../ts/interfaces/global_interface";
@@ -62,8 +64,20 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
     }
   };
 
+  const handleNewGame = () => {
+    setGame(null); // Setze das Spiel zurück
+    setCurrentPlayerIndex(null);
+    setSelectedCard(null);
+    setError(null);
+    window.location.href = "/"; // Hier wird die Seite direkt zur Startseite umgeleitet
+  };
+
   if (!game) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <div>Loading...</div>
+      </div>
+    );
   }
 
   const currentPlayer = game.players[currentPlayerIndex!];
@@ -94,7 +108,13 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
         <h2 className="defender">
           Defender: {game.players[game.currentDefenderIndex].name}
         </h2>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginLeft: "200px",
+          }}
+        >
           <div
             style={{
               backgroundColor: "yellow",
@@ -102,8 +122,8 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
               border:
                 currentPlayerIndex === game.currentAttackerIndex ||
                 currentPlayerIndex === game.currentDefenderIndex
-                  ? "2px solid red"
-                  : "none",
+                  ? "5px solid red"
+                  : "5px solid green",
             }}
           >
             <h3>Your Hand</h3>
@@ -127,7 +147,15 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
               ))}
             </div>
           </div>
-          <div style={{ backgroundColor: "orange", padding: "20px" }}>
+          <div
+            style={{
+              height: "350px",
+              width: "300px",
+              backgroundColor: "orange",
+              padding: "20px",
+              marginRight: "200px",
+            }}
+          >
             <h3>Table</h3>
             <div>
               {game.table.map((play, index) => (
@@ -144,7 +172,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
             </div>
           </div>
         </div>
-        <div>
+        <div style={{marginLeft: "200px"}}>
           <button onClick={handlePlaceCard} disabled={!selectedCard}>
             Place Card
           </button>
@@ -157,6 +185,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
         </div>
       </div>
       {error && <div style={{ color: "red" }}>{error}</div>}
+      <button onClick={handleNewGame} style={{marginLeft: "200px"}}>End Game and Start New Game</button>
     </div>
   );
 };
