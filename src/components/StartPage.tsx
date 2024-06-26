@@ -49,7 +49,7 @@ const StartPage: React.FC<StartPageProps> = ({ onStartGame }) => {
   };
 
   return (
-    <div>
+    <div style={{marginTop: "200px"}}>
       <h1>Welcome to Durak</h1>
       <h2>Enter Player Names (2 to 4 players)</h2>
       {playerNames.map((name, index) => (

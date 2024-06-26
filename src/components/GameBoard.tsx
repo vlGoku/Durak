@@ -118,7 +118,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
   return (
     <div>
       <div>
-        <h1 className="durakHeader">Durak</h1>
+        <h1 className="durakHeader" style={{marginBottom: "50px", marginTop: "50px"}}>Durak</h1>
         <div className="header">
           <div className="playerAndDeck">
             <strong>Players:</strong>{" "}
@@ -182,7 +182,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ playerNames }) => {
           <div
             style={{
               height: "350px",
-              width: "300px",
+              width: "400px",
               backgroundColor: "orange",
               padding: "20px",
               marginRight: "200px",
